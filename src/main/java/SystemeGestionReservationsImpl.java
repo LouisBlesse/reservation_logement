@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SystemeGestionReservationsImpl implements SystemeGestionReservations{
-
+    static Filtre newFiltre;
     public static void createClient(){
         Scanner myObj = new Scanner(System.in);
 
@@ -105,10 +105,10 @@ public class SystemeGestionReservationsImpl implements SystemeGestionReservation
         System.out.println("Dans quelle région voulez vous partir ?");
         String region = myObj.nextLine();
 
-        System.out.println("Quel est la date du début de votre séjour (AAAA-MM-JJ)?");
+        System.out.println("Quand va commencer votre voyage ? (YYYY-MM-DD)");
         String dateDebut = myObj.nextLine();
 
-        System.out.println("Quel est la date de fin de votre séjour (AAAA-MM-JJ)?");
+        System.out.println("Quand va finir votre voyage ? (YYYY-MM-DD)");
         String dateFin = myObj.nextLine();
 
         System.out.println("Quel est le type de l'hébergement ? \n1: Hôtel\n2: Motel\n3: Couette\n4: Café");
@@ -153,10 +153,18 @@ public class SystemeGestionReservationsImpl implements SystemeGestionReservation
         System.out.println("Voulez vous un restaurant \n 1: oui \n 2: non");
         int restaurant = myObj.nextInt();
 
-        Filtre newFiltre = new Filtre(region,dateDebut,dateFin,type,typeChambre,piscine,salle,parking,accesHandicape,depaneur,restaurant);
-
+        newFiltre = new Filtre(region,type,typeChambre,dateFin,dateDebut,piscine,salle,parking,accesHandicape,depaneur,restaurant);
 
         ArrayList<Hebergement> hebergements = (ArrayList<Hebergement>) Main.connected.seachHebergement(newFiltre);
         return hebergements;
+    }
+
+    public static void createReservation(Client user, Hebergement hebergement){
+        Main.connected.createReservation(user, hebergement, newFiltre);
+    }
+
+    public static ArrayList<Reservation> seachReservation(Client user){
+        ArrayList<Reservation> reservations = Main.connected.seachReservation(user);
+        return reservations;
     }
 }

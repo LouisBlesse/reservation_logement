@@ -13,4 +13,6 @@ public interface SystemeGestionReservations {
     public static List<Hebergement> seachHebergement(){
         return (new ArrayList<Hebergement>());
     };
+
+    public static void createReservation (){};
 }

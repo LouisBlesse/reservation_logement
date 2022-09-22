@@ -42,7 +42,7 @@ public class ConnectBDD {
             if (rs.next() == false) {
                 System.out.println("Utilisateur inconnu");
             } else {
-                System.out.println(rs.getString(1) + " " + rs.getString(2));
+                //System.out.println(rs.getString(1) + " " + rs.getString(2));
                 user = new Client(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), Integer.parseInt(rs.getString(5)), rs.getString(6), rs.getString(7));
             }
         } catch (Exception e) {
@@ -86,11 +86,85 @@ public class ConnectBDD {
                         Integer.parseInt(rs.getString(8)), Integer.parseInt(rs.getString(9)),
                         Integer.parseInt(rs.getString(10)), Integer.parseInt(rs.getString(11)),
                         Integer.parseInt(rs.getString(12)), Integer.parseInt(rs.getString(13)));
-                hebergements.add(tmp);
+                Boolean check = Main.connected.checkReservation(tmp, filtre);
+                System.out.println(check);
+                if (check){
+                    hebergements.add(tmp);
+                }
+
             }
         } catch (Exception e) {
             System.out.println("fail to connect : " + e);
         }
         return hebergements;
+    }
+
+    public static boolean checkReservation(Hebergement hebergement, Filtre filtre){
+        int nbr=0;
+        String query = "SELECT * FROM reservations WHERE (idHebergement ='"+hebergement.id+"' AND typeChambre ='"
+                +filtre.typeChambre+"' AND dateDebut NOT BETWEEN "+filtre.dateDebut+
+                " AND "+filtre.dateFin+" AND dateFin NOT BETWEEN "+filtre.dateDebut+
+                " AND "+filtre.dateFin+")";
+        System.out.println(query);
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                nbr++;
+            }
+            System.out.println(nbr);
+            if (filtre.typeChambre=="nombreChambres"){
+                if(hebergement.nombreChambres>nbr){
+                    return true;
+                }
+            } else if (filtre.typeChambre=="nombreChambresDoubles") {
+                if(hebergement.nombreChambresDouble>nbr){
+                    return true;
+                }
+            }else if (filtre.typeChambre=="nombreChambresSuites"){
+                if(hebergement.nombreChambresSuites>nbr){
+                    return true;
+                }
+            }
+
+        }
+        catch (Exception e){
+            System.out.println("fail to connect : " + e);
+        }
+        return false;
+    }
+
+    public void createReservation(Client user, Hebergement hebergement, Filtre newFiltre){
+        String uniqueID = UUID.randomUUID().toString();
+        String query = "INSERT INTO reservations VALUES ('" + uniqueID +"', '"+ user.id+"', '"+ hebergement.id+"', '"+ newFiltre.dateDebut+"', '"+ newFiltre.dateFin+"', '"+ newFiltre.typeChambre+"');" ;
+        System.out.println(query);
+        try{
+            PreparedStatement statement = connection.prepareStatement(query);
+            int rs = statement.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println("fail to insert reservation : " + e);
+        }
+    };
+
+    public static ArrayList<Reservation> seachReservation (Client user){
+        String query = "SELECT * FROM reservations WHERE (idClient ='"+user.id+"')";
+        System.out.println(query);
+        ArrayList<Reservation> reservations= new ArrayList<Reservation>();;
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()){
+                //System.out.println(rs.getString(1) + " " + rs.getString(2));
+                Reservation tmp = new Reservation(rs.getString(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6));
+                reservations.add(tmp);
+            }
+        } catch (Exception e) {
+            System.out.println("fail to connect : " + e);
+        }
+        return reservations;
     }
 }

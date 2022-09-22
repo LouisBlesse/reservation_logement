@@ -1,9 +1,9 @@
 public class Filtre {
     public String region;
-    public String dateDebut;
-    public String dateFin;
     public String type;
     public String typeChambre;
+    public String dateFin;
+    public String dateDebut;
     public int piscine;
     public int salle;
     public int parking;
@@ -11,10 +11,8 @@ public class Filtre {
     public int depaneur;
     public int restaurant;
 
-    public Filtre(String region, String dateDebut, String dateFin, String type, String typeChambre, int piscine, int salle, int parking, int accesHandicape, int depaneur, int restaurant) {
+    public Filtre(String region, String type, String typeChambre,String dateFin,String dateDebut, int piscine, int salle, int parking, int accesHandicape, int depaneur, int restaurant) {
         this.region = region;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
         this.type = type;
         this.typeChambre = typeChambre;
         this.piscine = piscine;
@@ -23,5 +21,10 @@ public class Filtre {
         this.accesHandicape = accesHandicape;
         this.depaneur = depaneur;
         this.restaurant = restaurant;
+        this.dateFin = dateFin;
+        this.dateDebut = dateDebut;
+    }
+
+    public Filtre() {
     }
 }

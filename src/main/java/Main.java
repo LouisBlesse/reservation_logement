@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
     static ConnectBDD connected;
     static Client user;
+
     public static void main (String args[])  {
         connected = new ConnectBDD();
         connected.connect();
@@ -37,12 +38,19 @@ public class Main {
                     choix = myObj.nextInt();
                     if (choix == 1){
                         System.out.println("WIP");
+                        SystemeGestionReservationsImpl.createReservation(user, hebergement);
                     }
                 }
             }
             else if (choix == 2){
-                System.out.println("WIP");
-                //voir les réservations
+                ArrayList<Reservation> reservations = SystemeGestionReservationsImpl.seachReservation(user);
+                for (Reservation reservation: reservations) {
+                    System.out.println("Voulez vous annuler cette réservation ?\n"+reservation.toString()+"\n1: oui \n2: non");
+                    choix = myObj.nextInt();
+                    if (choix == 1){
+                        System.out.println("WIP");
+                    }
+                }
             } else {
                 break;
             }
