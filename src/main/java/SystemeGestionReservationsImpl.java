@@ -167,4 +167,8 @@ public class SystemeGestionReservationsImpl implements SystemeGestionReservation
         ArrayList<Reservation> reservations = Main.connected.seachReservation(user);
         return reservations;
     }
+
+    public static void deleteReservation (Reservation reservation){
+        Main.connected.deleteReservation(reservation);
+    }
 }

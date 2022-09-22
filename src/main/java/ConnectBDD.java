@@ -167,4 +167,16 @@ public class ConnectBDD {
         }
         return reservations;
     }
+
+    public static void deleteReservation (Reservation reservation){
+        String query = "DELETE FROM reservations WHERE (id ='"+reservation.id+"')";
+        System.out.println(query);
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            int rs = statement.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("fail to connect : " + e);
+        }
+    }
 }

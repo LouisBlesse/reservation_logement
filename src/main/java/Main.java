@@ -49,6 +49,7 @@ public class Main {
                     choix = myObj.nextInt();
                     if (choix == 1){
                         System.out.println("WIP");
+                        SystemeGestionReservationsImpl.deleteReservation(reservation);
                     }
                 }
             } else {
