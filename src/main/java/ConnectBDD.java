@@ -21,7 +21,7 @@ public class ConnectBDD {
     public void newClient(Client client){
         String uniqueID = UUID.randomUUID().toString();
         String query = "INSERT INTO Client (nom, adresse, courriel, tel, admin, mdp, id) VALUES ('" + client.nom +"', '"+ client.adresse+"', '"+ client.courriel+"', '"+ client.tel+"', "+ client.admin+", '"+ client.mdp+"', '"+ uniqueID+"');" ;
-        System.out.println(query);
+        //System.out.println(query);
         try{
             PreparedStatement statement = connection.prepareStatement(query);
             int rs = statement.executeUpdate();
@@ -33,7 +33,7 @@ public class ConnectBDD {
 
     public static Client connectClient(String nom, String mdp) {
         String sqlCommand = "SELECT * FROM Client WHERE (nom ='" + nom + "' AND mdp ='" + mdp + "') LIMIT 1;";
-        System.out.println(sqlCommand);
+        //System.out.println(sqlCommand);
         Client user = null;
         try {
             PreparedStatement statement = connection.prepareStatement(sqlCommand);
@@ -72,7 +72,7 @@ public class ConnectBDD {
                 " AND salle = "+filtre.salle+" AND accesHandicape = "+filtre.accesHandicape+
                 " AND depaneur = "+filtre.depaneur+" AND restaurant = "+filtre.restaurant+")";
 
-        System.out.println(query);
+        //System.out.println(query);
         ArrayList<Hebergement> hebergements= new ArrayList<Hebergement>();;
         try {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -87,7 +87,7 @@ public class ConnectBDD {
                         Integer.parseInt(rs.getString(10)), Integer.parseInt(rs.getString(11)),
                         Integer.parseInt(rs.getString(12)), Integer.parseInt(rs.getString(13)));
                 Boolean check = Main.connected.checkReservation(tmp, filtre);
-                System.out.println(check);
+                //System.out.println(check);
                 if (check){
                     hebergements.add(tmp);
                 }
@@ -105,14 +105,14 @@ public class ConnectBDD {
                 +filtre.typeChambre+"' AND dateDebut NOT BETWEEN "+filtre.dateDebut+
                 " AND "+filtre.dateFin+" AND dateFin NOT BETWEEN "+filtre.dateDebut+
                 " AND "+filtre.dateFin+")";
-        System.out.println(query);
+        //System.out.println(query);
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
                 nbr++;
             }
-            System.out.println(nbr);
+            //System.out.println(nbr);
             if (filtre.typeChambre=="nombreChambres"){
                 if(hebergement.nombreChambres>nbr){
                     return true;
@@ -137,7 +137,7 @@ public class ConnectBDD {
     public void createReservation(Client user, Hebergement hebergement, Filtre newFiltre){
         String uniqueID = UUID.randomUUID().toString();
         String query = "INSERT INTO reservations VALUES ('" + uniqueID +"', '"+ user.id+"', '"+ hebergement.id+"', '"+ newFiltre.dateDebut+"', '"+ newFiltre.dateFin+"', '"+ newFiltre.typeChambre+"');" ;
-        System.out.println(query);
+        //System.out.println(query);
         try{
             PreparedStatement statement = connection.prepareStatement(query);
             int rs = statement.executeUpdate();
@@ -149,7 +149,7 @@ public class ConnectBDD {
 
     public static ArrayList<Reservation> seachReservation (Client user){
         String query = "SELECT * FROM reservations WHERE (idClient ='"+user.id+"')";
-        System.out.println(query);
+        //System.out.println(query);
         ArrayList<Reservation> reservations= new ArrayList<Reservation>();;
         try {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -170,7 +170,7 @@ public class ConnectBDD {
 
     public static void deleteReservation (Reservation reservation){
         String query = "DELETE FROM reservations WHERE (id ='"+reservation.id+"')";
-        System.out.println(query);
+        //System.out.println(query);
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             int rs = statement.executeUpdate();
